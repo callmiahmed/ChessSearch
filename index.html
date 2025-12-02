@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChessSearch</title>
+
+    <style>
+        body {
+            background-color: #312e2b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        #header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        #header img {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+        }
+
+        #header h1 {
+            font-family: 'Segoe UI';
+            color: white;
+            margin: 0;
+            font-size: 32px;
+        }
+
+        #header h1 span {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        input {
+            border: none;
+            background-color: #413d39;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border-radius: 4px;
+            font-weight: bold;
+            padding: 8px 10px;
+            transition: 0.25s ease;
+        }
+
+        input:focus {
+            outline: none;
+            transform: scale(1.02);
+        }
+
+        #search-usr-input {
+            text-align: center;
+        }
+
+        #search-section {
+            background-color: #413d39;
+            padding: 10px;
+            border-radius: 6px;
+            width: fit-content;
+            margin-bottom: 20px;
+        }
+
+        #data-section {
+            background-color: #413d39;
+            padding: 15px;
+            border-radius: 6px;
+            width: 260px;
+            min-height: 200px;
+            text-align: center;
+        }
+
+        #data-section img {
+            width: 120px;
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+
+        #data-display {
+            color: white;
+            font-family: sans-serif;
+        }
+
+        p {
+            color: wheat;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="header">
+        <img src="default.png" alt="Logo">
+        <h1><span>Chess</span>Search</h1>
+    </div>
+    
+    <div id="search-section">
+        <input type="button" id="search-usr-btn" value="Search">
+        <input type="text" id="search-usr-input" placeholder="Search For username" autocomplete="off">
+    </div>
+
+    <p>Below this section it will display the users Data:</p>
+
+    <div id="data-section">
+        <h4 id="data-display"></h4>
+        <img id="user-avatar" src="">
+    </div>
+
+    <script src="main.js"></script>
+
+</body>
+
+</html>
