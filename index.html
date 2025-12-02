@@ -1,119 +1,330 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
     <title>ChessSearch</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.js"></script>
 
     <style>
+        :root {
+            --bg: #312e2b;
+            --card: #413d39;
+            --accent: #4CAF50;
+            --muted: #d9cfc7;
+            --white: #ffffff;
+        }
+
+        html,
         body {
-            background-color: #312e2b;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            min-height: 100vh;
+            height: 100%;
             margin: 0;
-        }
-
-        #header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-
-        #header img {
-            width: 45px;
-            height: 45px;
-            border-radius: 8px;
-        }
-
-        #header h1 {
-            font-family: 'Segoe UI';
-            color: white;
-            margin: 0;
-            font-size: 32px;
-        }
-
-        #header h1 span {
-            color: #4CAF50;
-            font-weight: bold;
-        }
-
-        input {
-            border: none;
-            background-color: #413d39;
-            color: white;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            border-radius: 4px;
-            font-weight: bold;
-            padding: 8px 10px;
-            transition: 0.25s ease;
+            background: var(--bg);
+            color: var(--muted)
         }
 
-        input:focus {
-            outline: none;
-            transform: scale(1.02);
+        .wrap {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 28px;
+            box-sizing: border-box
         }
 
-        #search-usr-input {
-            text-align: center;
+        header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px
         }
 
-        #search-section {
-            background-color: #413d39;
-            padding: 10px;
-            border-radius: 6px;
-            width: fit-content;
-            margin-bottom: 20px;
+        header img {
+            width: 56px;
+            height: 56px;
+            border-radius: 10px;
+            object-fit: cover
         }
 
-        #data-section {
-            background-color: #413d39;
-            padding: 15px;
-            border-radius: 6px;
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: var(--white)
+        }
+
+        header h1 .green {
+            color: var(--accent)
+        }
+
+        .controls {
+            background: var(--card);
+            padding: 14px;
+            border-radius: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35)
+        }
+
+        .controls input {
+            padding: 10px 12px;
             width: 260px;
-            min-height: 200px;
-            text-align: center;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--white);
+            font-weight: 600;
+            text-align: center
         }
 
-        #data-section img {
+        .controls input::placeholder {
+            color: #bfb6ad
+        }
+
+        .controls button {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white)
+        }
+
+        .layout {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 18px
+        }
+
+        .card {
+            background: var(--card);
+            padding: 16px;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35)
+        }
+
+        .profile {
+            text-align: center
+        }
+
+        .profile img {
             width: 120px;
+            height: 120px;
             border-radius: 50%;
-            margin-top: 10px;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.05)
         }
 
-        #data-display {
-            color: white;
-            font-family: sans-serif;
+        .profile h2 {
+            margin: 10px 0 4px 0;
+            color: var(--white)
         }
 
-        p {
-            color: wheat;
-            font-family: sans-serif;
+        .badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 8px
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 8px;
+            border-radius: 6px;
+            color: var(--white);
+            font-size: 12px
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 14px
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center
+        }
+
+        .stat h4 {
+            margin: 0;
+            color: var(--white)
+        }
+
+        .right {
+            display: flex;
+            flex-direction: column;
+            gap: 12px
+        }
+
+        .section {
+            background: var(--card);
+            padding: 12px;
+            border-radius: 10px
+        }
+
+        .section h3 {
+            margin: 0 0 8px 0;
+            color: var(--white)
+        }
+
+        .games-list {
+            max-height: 260px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .game-item {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            color: #d4c8be
+        }
+
+        .heatmap {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap
+        }
+
+        .heatcell {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.05)
+        }
+
+        #chartContainer {
+            height: 220px
+        }
+
+        @media(max-width:900px) {
+            .layout {
+                grid-template-columns: 1fr
+            }
         }
     </style>
 </head>
 
 <body>
+    <div class="wrap">
 
-    <div id="header">
-        <img src="default.png" alt="Logo">
-        <h1><span>Chess</span>Search</h1>
-    </div>
-    
-    <div id="search-section">
-        <input type="button" id="search-usr-btn" value="Search">
-        <input type="text" id="search-usr-input" placeholder="Search For username" autocomplete="off">
-    </div>
+        <header>
+            <img src="default.png" id="top-logo">
+            <h1><span class="green">Chess</span>Search</h1>
+        </header>
 
-    <p>Below this section it will display the users Data:</p>
+        <div class="controls">
+            <input id="search-usr-input" placeholder="Search for username (e.g. magnuscarlsen)" />
+            <button id="search-usr-btn">Search</button>
+            <button id="compare-mode-btn">Compare</button>
+        </div>
 
-    <div id="data-section">
-        <h4 id="data-display"></h4>
-        <img id="user-avatar" src="">
+        <div class="layout">
+            <div class="card" id="profile-card">
+                <div class="profile">
+                    <img id="avatar" src="default.png">
+                    <h2 id="username">—</h2>
+                    <div id="titleAndCountry">—</div>
+                    <div class="badges" id="badges"></div>
+                </div>
+
+                <div class="stat-grid">
+                    <div class="stat">
+                        <h4 id="onlineStatus">—</h4>
+                        <p>Online</p>
+                    </div>
+                    <div class="stat">
+                        <h4 id="followers">0</h4>
+                        <p>Followers</p>
+                    </div>
+                    <div class="stat">
+                        <h4 id="joined">—</h4>
+                        <p>Joined</p>
+                    </div>
+                    <div class="stat">
+                        <h4 id="lastSeen">—</h4>
+                        <p>Last Seen</p>
+                    </div>
+                </div>
+
+                <div style="margin-top:14px">
+                    <strong style="color:white">Piece Performance</strong>
+                    <div style="display:flex;margin-top:8px;gap:10px">
+                        <div style="flex:1">
+                            <div style="color:white;font-weight:700">White</div>
+                            <div id="whiteRecord">—</div>
+                        </div>
+                        <div style="flex:1">
+                            <div style="color:white;font-weight:700">Black</div>
+                            <div id="blackRecord">—</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right">
+
+                <div class="section">
+                    <h3>Ratings & Records</h3>
+                    <div style="display:flex;gap:20px;flex-wrap:wrap">
+                        <div><strong style="color:white">Rapid</strong>
+                            <div id="rapidRating">—</div>
+                            <div id="rapidRecord">—</div>
+                        </div>
+                        <div><strong style="color:white">Blitz</strong>
+                            <div id="blitzRating">—</div>
+                            <div id="blitzRecord">—</div>
+                        </div>
+                        <div><strong style="color:white">Bullet</strong>
+                            <div id="bulletRating">—</div>
+                            <div id="bulletRecord">—</div>
+                        </div>
+                        <div><strong style="color:white">Tactics</strong>
+                            <div id="tacticsRating">—</div>
+                            <div id="tacticsRecord">—</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>Rating History</h3>
+                    <div id="chartContainer"><canvas id="ratingChart"></canvas></div>
+                </div>
+
+                <div class="section">
+                    <h3>Recent Games</h3>
+                    <div class="games-list" id="recentGames"></div>
+                </div>
+
+                <div class="section">
+                    <h3>Openings</h3>
+                    <div id="openingsList">—</div>
+                </div>
+
+                <div class="section">
+                    <h3>Activity Heatmap</h3>
+                    <div class="heatmap" id="heatmap"></div>
+                </div>
+
+            </div>
+
+        </div>
     </div>
 
     <script src="main.js"></script>
